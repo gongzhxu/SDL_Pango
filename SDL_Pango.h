@@ -13,10 +13,10 @@ extern const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_WHITE_LETTER;
 extern const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER;
 
 extern DECLSPEC int SDLCALL
-SDLPango_Init();
+SDLPango_Init(void);
 
 extern DECLSPEC int SDLCALL
-SDLPango_WasInit();
+SDLPango_WasInit(void);
 
 extern DECLSPEC SDLPango_Context* SDLCALL
 SDLPango_CreateContext(void);

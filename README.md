@@ -1,6 +1,6 @@
 # SDL_Pango
 
-[SDL_Pango Demo](https://raw.githubusercontent.com/Barakat/SDL_Pango/master/example.png)
+![SDL_Pango Demo](example.png)
 
 This project is a lightweight rewrite of
 [SDL_Pango](http://sdlpango.sourceforge.net/) to work with SDL2. The

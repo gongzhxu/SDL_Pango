@@ -68,6 +68,7 @@ int main(int argc, char **argv)
   SDL_RenderClear(renderer);
 
   SDL_RenderCopy(renderer, background, NULL, NULL);
+  SDL_DestroyTexture(background);
 
   for(;;) {
     SDL_Event event;

@@ -137,8 +137,6 @@ SDLPango_SetMinimumSize(SDLPango_Context* context,
                         int width,
                         int height)
 {
-  (void) height;
-
   pango_layout_set_width(context->layout, width > 0 ? width * PANGO_SCALE : -1);
   pango_layout_set_height(context->layout, height);
 }

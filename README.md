@@ -1,5 +1,7 @@
 # SDL_Pango
 
+[SDL_Pango Demo](https://raw.githubusercontent.com/Barakat/SDL_Pango/master/example.png)
+
 This project is a lightweight rewrite of
 [SDL_Pango](http://sdlpango.sourceforge.net/) to work with SDL2. The
 code is much shorter and provides almost similar functionality.

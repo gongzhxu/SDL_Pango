@@ -2,7 +2,7 @@
 
 This project is a lightweight rewrite of
 [SDL_Pango](http://sdlpango.sourceforge.net/) to work with SDL2. The
-code is much shorter and provides almost smiler functionality.
+code is much shorter and provides almost similar functionality.
 
 # Documentation
 
@@ -12,7 +12,7 @@ original SDL_Pango project.
 
 # Known issues
 
-* Only the fundamental SDL_Pango's original project APIs are rewrite.
+* Only the fundamental SDL_Pango's original project APIs are rewritten.
 * There is a tiny black border around the white letters on non-black background
 and vice versa, which could be solved by changing SDL blending mode using
 `SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_MOD)` or

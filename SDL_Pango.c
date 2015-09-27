@@ -6,28 +6,6 @@
 #include <freetype2/freetype.h>
 #include <freetype2/ftbitmap.h>
 
-/*
- * This is just a work around to provide backward compatibility with
- * the matrices provides by SDL_Pango, for now. We may replace it with
- * proper API.
- *
- * TODO: Port the functionality.
- */
-const SDLPango_Matrix *MATRIX_WHITE_BACK
-  = (SDLPango_Matrix *) &MATRIX_WHITE_BACK;
-
-const SDLPango_Matrix *MATRIX_BLACK_BACK
-  = (SDLPango_Matrix *) &MATRIX_BLACK_BACK;
-
-const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_BLACK_LETTER
-  = (SDLPango_Matrix *) &MATRIX_TRANSPARENT_BACK_BLACK_LETTER;
-
-const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_WHITE_LETTER
-  = (SDLPango_Matrix *) &MATRIX_TRANSPARENT_BACK_WHITE_LETTER;
-
-const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER
-  = (SDLPango_Matrix *) &MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER;
-
 /**
  * Default font and size.
  */
@@ -42,7 +20,7 @@ struct __SDLPango_Context {
   PangoContext* context;
   PangoLayout* layout;
   PangoFontDescription* fontdesc;
-  const SDLPango_Matrix *color;
+  SDL_Color color;
 };
 
 /* initialization/finalization ************************************************/
@@ -90,7 +68,10 @@ SDLPango_CreateContext(void)
   context->context = pango_font_map_create_context(context->fontmap);
   context->layout = pango_layout_new(context->context);
   context->fontdesc = pango_font_description_from_string(FONT_DESCRIPTION);
-  context->color = MATRIX_TRANSPARENT_BACK_WHITE_LETTER;
+  context->color.r = 0xff;
+  context->color.g = 0xff;
+  context->color.b = 0xff;
+  context->color.a = 0xff;
 
   return context;
 }
@@ -116,13 +97,27 @@ SDLPango_FreeContext(SDLPango_Context *context)
   Specify default color.
 
   @param *context [i/o] Context
-  @param *color_matrix [in] Foreground and background color
+  @param *color [in] Text color
 */
 void
-SDLPango_SetDefaultColor(SDLPango_Context* context,
-                         const SDLPango_Matrix* color_matrix)
+SDLPango_SetColor(SDLPango_Context* context,
+                  const SDL_Color* color)
 {
-  context->color = color_matrix;
+  context->color.r = color->r;
+  context->color.g = color->g;
+  context->color.b = color->b;
+  context->color.a = color->a;
+}
+
+/*!
+  Get the default color.
+
+  @return Default color
+*/
+SDL_Color
+SDLPango_GetColor(SDLPango_Context* context)
+{
+  return context->color;
 }
 
 /*!
@@ -209,9 +204,6 @@ SDLPango_Draw(SDLPango_Context *context,
   int yindex;
   FT_Bitmap bitmap;
 
-  if(context->color == MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER)
-    return;
-
   FT_Bitmap_Init(&bitmap);
 
   bitmap.width = surface->w;
@@ -230,18 +222,13 @@ SDLPango_Draw(SDLPango_Context *context,
   for(xindex = 0; xindex < surface->w ; xindex++) {
     for(yindex = 0; yindex < surface->h ; yindex++) {
       Uint8 pixel = (bitmap.buffer)[yindex * surface->w + xindex];
-      Uint8 alpha = pixel;
-      
-      if(context->color == MATRIX_BLACK_BACK) {
-        alpha = 255;
-      }
-      else if(context->color == MATRIX_WHITE_BACK) {
-        pixel = ~pixel;
-        alpha = 255;
-      }
-      else if(context->color == MATRIX_TRANSPARENT_BACK_BLACK_LETTER) {
-        pixel = ~pixel;
-      }
+      SDL_Color color = context->color;
+
+      color.r ^= (Uint8)(pixel / 255.0f);
+      color.g ^= (Uint8)(pixel / 255.0f);
+      color.b ^= (Uint8)(pixel / 255.0f);
+      color.a = pixel;
+
       /*
         Keep the default value with MATRIX_TRANSPARENT_BACK_WHITE_LETTER
       */
@@ -249,11 +236,13 @@ SDLPango_Draw(SDLPango_Context *context,
       switch(surface->format->BytesPerPixel) {
         case 2:
           ((Uint16 *)surface->pixels)[yindex * surface->w + xindex]
-            = (Uint16)SDL_MapRGBA(surface->format, pixel, pixel, pixel, alpha);
+            = (Uint16)SDL_MapRGBA(surface->format,
+                color.r, color.g, color.b, color.a);
           break;
         case 4:
           ((Uint32 *)surface->pixels)[yindex * surface->w + xindex]
-            = (Uint32)SDL_MapRGBA(surface->format, pixel, pixel, pixel, alpha);
+            = (Uint32)SDL_MapRGBA(surface->format,
+                color.r, color.g, color.b, color.a);
           break;
         default:
           SDL_SetError("surface->format->BytesPerPixel is invalid value");

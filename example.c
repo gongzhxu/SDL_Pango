@@ -5,7 +5,7 @@
 int main(int argc, char **argv)
 {
   int width = 640;
-  int height = 480;
+  int height = 200;
   int margin = 10;
   SDL_Window *window;
   SDL_Renderer *renderer;
@@ -13,6 +13,7 @@ int main(int argc, char **argv)
   SDL_Texture* background;
   Uint32 rmask, gmask, bmask, amask;
   SDLPango_Context *context;
+  SDL_Color textcolor = {0xa9, 0xf8, 0x69, 0xff};
 
   const char * const text =
     "<span font=\"50\">"
@@ -38,7 +39,7 @@ int main(int argc, char **argv)
 
   context = SDLPango_CreateContext();
 
-  SDLPango_SetDefaultColor(context, MATRIX_WHITE_BACK);
+  SDLPango_SetColor(context, &textcolor);
   SDLPango_SetMinimumSize(context, width - margin, height - margin);
 
   SDLPango_SetMarkup(context, text, -1);
@@ -57,17 +58,13 @@ int main(int argc, char **argv)
 
   surface = SDL_CreateRGBSurface(0, width, height, 32, rmask, gmask, bmask, amask);
 
-  /* FIXME: This trick is to remove the small dark border around the text. */
-#if 0
-  SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_MOD);
-#endif
   SDLPango_Draw(context, surface, margin, margin);
   SDLPango_FreeContext(context);
 
   background = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface);
 
-  SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+  SDL_SetRenderDrawColor(renderer, 0x83, 0x1c, 0xc5, 0xff);
   SDL_RenderClear(renderer);
 
   SDL_RenderCopy(renderer, background, NULL, NULL);

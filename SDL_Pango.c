@@ -229,10 +229,6 @@ SDLPango_Draw(SDLPango_Context *context,
       color.b ^= pixel == 255;
       color.a = pixel;
 
-      /*
-        Keep the default value with MATRIX_TRANSPARENT_BACK_WHITE_LETTER
-      */
-
       switch(surface->format->BytesPerPixel) {
         case 2:
           ((Uint16 *)surface->pixels)[yindex * surface->w + xindex]

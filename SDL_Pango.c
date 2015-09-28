@@ -224,9 +224,9 @@ SDLPango_Draw(SDLPango_Context *context,
       Uint8 pixel = (bitmap.buffer)[yindex * surface->w + xindex];
       SDL_Color color = context->color;
 
-      color.r ^= (Uint8)(pixel / 255.0f);
-      color.g ^= (Uint8)(pixel / 255.0f);
-      color.b ^= (Uint8)(pixel / 255.0f);
+      color.r ^= pixel == 255;
+      color.g ^= pixel == 255;
+      color.b ^= pixel == 255;
       color.a = pixel;
 
       /*

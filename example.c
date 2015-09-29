@@ -59,7 +59,6 @@ int main(int argc, char **argv)
   surface = SDL_CreateRGBSurface(0, width, height, 32, rmask, gmask, bmask, amask);
 
   SDLPango_Draw(context, surface, margin, margin);
-  SDLPango_FreeContext(context);
 
   background = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface);
@@ -68,7 +67,6 @@ int main(int argc, char **argv)
   SDL_RenderClear(renderer);
 
   SDL_RenderCopy(renderer, background, NULL, NULL);
-  SDL_DestroyTexture(background);
 
   for(;;) {
     SDL_Event event;
@@ -79,6 +77,8 @@ int main(int argc, char **argv)
     SDL_RenderPresent(renderer);
   }
 
+  SDL_DestroyTexture(background);
+  SDLPango_FreeContext(context);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   SDL_Quit();

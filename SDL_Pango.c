@@ -137,21 +137,6 @@ SDLPango_SetMinimumSize(SDLPango_Context* context,
 }
 
 /*!
-  Get layout height.
-
-  @param *context [in] Context
-  @return Height
-*/
-int
-SDLPango_GetLayoutHeight(SDLPango_Context *context)
-{
-  PangoRectangle rectangle;
-
-  pango_layout_get_extents(context->layout, NULL, &rectangle);
-  return PANGO_PIXELS(rectangle.height);
-}
-
-/*!
   Get layout width.
 
   @param *context [in] Context
@@ -164,6 +149,21 @@ SDLPango_GetLayoutWidth(SDLPango_Context *context)
 
   pango_layout_get_extents(context->layout, NULL, &rectangle);
   return PANGO_PIXELS(rectangle.width);
+}
+
+/*!
+  Get layout height.
+
+  @param *context [in] Context
+  @return Height
+*/
+int
+SDLPango_GetLayoutHeight(SDLPango_Context *context)
+{
+  PangoRectangle rectangle;
+
+  pango_layout_get_extents(context->layout, NULL, &rectangle);
+  return PANGO_PIXELS(rectangle.height);
 }
 
 /*!

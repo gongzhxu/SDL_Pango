@@ -16,9 +16,9 @@ original SDL_Pango project.
 
 Only the following functions are implemented:
 
-    SDLPango_Init;
-    SDLPango_WasInit;
-    SDLPango_CreateContext;
+    SDLPango_Init
+    SDLPango_WasInit
+    SDLPango_CreateContext
     SDLPango_FreeContext
     SDLPango_SetMinimumSize
     SDLPango_GetLayoutHeight

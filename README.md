@@ -14,8 +14,19 @@ original SDL_Pango project.
 
 # Different API from SDL_Pango
 
-There are two new methods to replace `SDLPango_SetDefaultColor` and the removed
-`SDLPango_Matrix` which allows you to specify the text color:
+Only the following functions are implemented:
+
+    SDLPango_Init;
+    SDLPango_WasInit;
+    SDLPango_CreateContext;
+    SDLPango_FreeContext
+    SDLPango_SetMinimumSize
+    SDLPango_GetLayoutHeight
+    SDLPango_GetLayoutWidth
+    SDLPango_SetMarkup
+    SDLPango_Draw
+
+The function [`SDLPango_SetDefaultColor`](http://sdlpango.sourceforge.net/_s_d_l___pango_8c.html#a29) is replaced by:
 
     void
     SDLPango_SetColor(SDLPango_Context* context,
@@ -24,10 +35,7 @@ There are two new methods to replace `SDLPango_SetDefaultColor` and the removed
     SDL_Color
     SDLPango_GetColor(SDLPango_Context* context);
 
-# Known issues
+# Build
 
-* Only the fundamental SDL_Pango's original project APIs are rewritten.
-* ~~There is a tiny black border around the white letters on non-black
-background and vice versa, which could be solved by changing SDL blending mode
-using `SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_MOD)` or
-`SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_ADD)`~~.
+    $ gcc -Wall -Wextra -pedantic -std=c99 $(pkg-config --cflags pango SDL2 freetype2 pangoft2) SDL_Pango.c example.c $(pkg-config --libs pango SDL2 freetype2 pangoft2) -o example
+    $ ./example

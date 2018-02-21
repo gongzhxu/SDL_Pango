@@ -2,9 +2,9 @@
 
 #include <pango/pango.h>
 #include <pango/pangoft2.h>
-#include <freetype2/ft2build.h>
-#include <freetype2/freetype.h>
-#include <freetype2/ftbitmap.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_BITMAP_H
 
 /**
  * Default font and size.
@@ -219,26 +219,23 @@ SDLPango_Draw(SDLPango_Context *context,
 
   SDL_LockSurface(surface);
 
+  SDL_Color color = context->color;
+
   for(xindex = 0; xindex < surface->w ; xindex++) {
     for(yindex = 0; yindex < surface->h ; yindex++) {
+      /* the grayscale value is used as alpha channel */
       Uint8 pixel = (bitmap.buffer)[yindex * surface->w + xindex];
-      SDL_Color color = context->color;
-
-      color.r ^= pixel == 255;
-      color.g ^= pixel == 255;
-      color.b ^= pixel == 255;
-      color.a = pixel;
 
       switch(surface->format->BytesPerPixel) {
         case 2:
           ((Uint16 *)surface->pixels)[yindex * surface->w + xindex]
             = (Uint16)SDL_MapRGBA(surface->format,
-                color.r, color.g, color.b, color.a);
+                color.r, color.g, color.b, pixel);
           break;
         case 4:
           ((Uint32 *)surface->pixels)[yindex * surface->w + xindex]
             = (Uint32)SDL_MapRGBA(surface->format,
-                color.r, color.g, color.b, color.a);
+                color.r, color.g, color.b, pixel);
           break;
         default:
           SDL_SetError("surface->format->BytesPerPixel is invalid value");

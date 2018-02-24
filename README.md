@@ -37,5 +37,5 @@ The function [`SDLPango_SetDefaultColor`](http://sdlpango.sourceforge.net/_s_d_l
 
 # Build
 
-    $ gcc -Wall -Wextra -pedantic -std=c99 $(pkg-config --cflags pango SDL2 freetype2 pangoft2) SDL_Pango.c example.c $(pkg-config --libs pango SDL2 freetype2 pangoft2) -o example
+    $ gcc -Wall -Wextra -pedantic -std=c99 $(pkg-config --cflags pango sdl2 freetype2 pangoft2) SDL_Pango.c example.c $(pkg-config --libs pango sdl2 freetype2 pangoft2) -o example
     $ ./example
